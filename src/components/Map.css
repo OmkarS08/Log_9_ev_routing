@@ -1,5 +1,14 @@
 .map-container{
     width: 50%;
-    height:100px;
+    height:650px;
     margin: 50px auto;
+    padding: 50px 50px;
+}
+
+.marker{
+    width: 22px;
+    height: 22px;
+    background-color:yellow;
+    border: 1 px solid black;
+    border-radius: 11px;
 }
