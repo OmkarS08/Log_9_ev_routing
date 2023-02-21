@@ -12,3 +12,9 @@
     border: 1 px solid black;
     border-radius: 11px;
 }
+
+.marker-delivery{
+    width: 22px;
+    height: 22px;
+    background-color:red;
+}
