@@ -1,25 +1,25 @@
-
 import { useEffect, useRef, useState } from "react";
 import * as tt from '@tomtom-international/web-sdk-maps';
 import * as ttapi from '@tomtom-international/web-sdk-services';
-import './Map.css';
+import './MapExample.css';
 import'@tomtom-international/web-sdk-maps/dist/maps.css';
 
 /******************-Imports*************************** */
-export const Map = () =>{
+export const MapExample = () =>{
     const[map,setMap]= useState({});
     const[lat,setLat]=useState(12.9716);
     const[lng,setLng]=useState(77.5946);
     const mapELement =useRef();
 
 
+    // seprating the points in converToPoints
    const  convertToPoints =(lngLat) =>{
     return{
       point:{
         latitude:lngLat.lat,
         longitude:lngLat.lng
       }}}
-
+/******************Drawing Routes****************** */
       const drawRoute=(geoJson,map)=>{
         if(map.getLayer('route')){
           map.removeLayer('route')
@@ -38,7 +38,7 @@ export const Map = () =>{
           }
         })
       }
-
+/******************Drawing Routes****************** */
    const addDeliveryMarker =(lngLat,map)=>{
       const element = document.createElement('div');
       element.className = 'marker-delivery';
@@ -85,7 +85,7 @@ export const Map = () =>{
           .setLngLat([lng,lat])// lat lng of marker
           .addTo(map) // add to marker
 
-          marker.on('dreagend',()=>{ // get the lat lng after dragging
+          marker.on('dragend',()=>{ // get the lat lng after dragging
             const lngLat = marker.getLngLat()
             setLng(lngLat.lng)
             setLat(lngLat.lat)
