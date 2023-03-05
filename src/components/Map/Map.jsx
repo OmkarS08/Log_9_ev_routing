@@ -9,19 +9,19 @@ export const Map = () =>{
 
    /*********************Vechile-Specs*******************************/
    const audi ={
-    constantSpeedCosumptionInkWhPerHundredKm:['45,19','100,29.8'], // 45 is constant speed and 19 is consumptionin kwh same is for 100 on highways 
+    constantSpeedCosumptionInkWhPerHundredKm:'45,18.5:100,22.4', // 45 is constant speed and 19 is consumptionin kwh same is for 100 on highways 
     vechileEngineType:'electric',
-    vechileWeight:3245,
-    currentChargeInKWH:43.25,
-    maxChargeInKWH:86.5
+    vechileWeight:3245, // vechile weightl
+    currentChargeInKWH:43.25, // current SOc
+    maxChargeInKWH:86.5 // maximum the bateery can hold
   }
 
  /*********************Global-VAriable*******************************/
     const API_KEY = process.env.REACT_APP_TOM_TOM_API_KEY;
     const waypoints = [];
     const savedLocation ={
-        lat:12.9716,
-        lng:77.5946,
+        lat:49.24,
+        lng:-123.116,
         zoom:14
     }
 
@@ -32,7 +32,12 @@ export const Map = () =>{
     const[lat,setLat]=useState(12.9716);
     const[lng,setLng]=useState(77.5946);
     const mapELement =useRef();
-
+    const location = [];
+    const moveMap =(lngLat) =>{
+      map.flyTo({
+          center:lngLat,
+      })
+    }
     /****************************************************/
   useEffect(()=>{
     let map = tt.map({
@@ -47,36 +52,28 @@ export const Map = () =>{
       })
       setMap(map)
       map.on('click',function(event){
-        var location = event.lngLat;
+        const location = event.lngLat;
         moveMap(location)
-        // ttapi.services.calculateReachableRange({
-        //   key:API_KEY,
-        //   origin:location,
-        //   vechileEngineType:'electric',
-        //   constantSpeedCosumptionInkWhPerHundredKm:audi.constantSpeedCosumptionInkWhPerHundredKm,
-        //   energyBudgetInkWh:audi.currentChargeInKWH
-        // })
-        // .then((result)=>console.log(result))
+        ttapi.services.calculateReachableRange({
+          key:API_KEY,
+          versionNumber:1,
+          origin:location,
+          vehicleEngineType:'electric',
+          constantSpeedCosumptionInkWhPerHundredKm:audi.constantSpeedCosumptionInkWhPerHundredKm,
+          energyBudgetInkWh:audi.currentChargeInKWH 
       }) 
-      const moveMap =(lngLat) =>{
-        map.flyTo({
-            center:lngLat,
-            zoom:map.getZoom()
-        })
-      }
-  },[])
+      .then((result)=>console.log(result))
+
+  })},[])
       /****************************************************/
 
 
 
-     ttapi.services.longDistanceEVRouting({
-
-     })
 
       const SearchAdress = (idSource) =>{
             ttapi.services.fuzzySearch({
                 key:API_KEY,
-                query:document.getElementById('waypoints').value,
+                query:document.getElementById(idSource).value,
                 idxSet:'PAD,Addr,Geo'
             })
             .then((result) =>{
@@ -91,7 +88,10 @@ export const Map = () =>{
 
                 var marker =new tt.Marker({element:markerElement })
                 .setLngLat(first.position)
-                .addTo(map)
+                .addTo(map);
+     
+                moveMap(first.position);
+              
 
                 waypoints.push({
                     marker:marker,
@@ -104,44 +104,7 @@ export const Map = () =>{
             })
 
       }
-      const route = () =>{
-        const locations =waypoints.map((e) =>{
-          return e.location
-        })
-        console.log(locations)
 
-        const max =audi.maxChargeInKWH;
-
-        const routeOption={
-          key:API_KEY,
-          origin:locations[0],
-          destination:locations[1],
-          vechileWeight:audi.vechileWeight,
-          currentCharge:(max*0.5),// current SOC
-          maxCharge:max,
-          minFinalCharge:(max*0.2),
-          minChargeAtStop:(max*0.2),  // battery level at charging stop
-          speedConsumption:audi.constantSpeedCosumptionInkWhPerHundredKm,
-          chargingModes:audiChargingModes
-
-        }
-
-        calculateRoute(routeOption)
-
-        // route calculation
-        // ttapi.services.calculateRoute({
-        //   key:API_KEY,
-        //   traffic:true,
-        //   locations:locations,
-        // },audi)
-        // .then((result)=>{
-        //   const geoJson =result.toGeoJson();
-        //   drawRoute(geoJson,map)
-        //   //drawconsumption(geoJson)
-
-        //   SearchChargingStation(result);
-        // })
-      }
 
       const drawRoute=(geoJson,map)=>{
         if(map.getLayer('route')){
@@ -180,112 +143,15 @@ export const Map = () =>{
           })
       }
 
-      const audiChargingModes ={
-          chargingMode:[
-            {
-              chargingConnections:[{
-                  facilityType:"Charge_100_to_120V_1_Phase_at_10A",
-                  plugType:"IEC_60309_1_Phase"
-                  
-                },
-                {
-                  facilityType:"Charge_100_to_120V_1_Phase_at_12A",
-                  plugType:"IEC_60309_3_Phase"
-                  
-                }
-              ],
-              chargingCurve:[
-                {
-                  chargeInkWh:95, 
-                  timeToChargeInSeconds:8900,
-                }
-              ]
-            },
-            {
-              chargingConnections:[
-                {
-                  facilityType:"Charge_200_to_480V_Direct_Current_at_255A_120kW",
-                  plugType:"CHAdeMO",
-                  
-                },
-                {
-                  facilityType:"Charge_200_to_240V_1_Phase_at_10A",
-                  plugType:"IEC_62196_Type_2_Connector_Cable_Attached"
-                  
-                },
-                {
-                  facilityType:"Charge_380_to_480V_3_Phase_at_32A",
-                  plugType:"China_GB_Part_3"
-                  
-                }
-              ],
-              chargingCurve:[
-                {
-                  chargeInkWh :95, 
-                  timeToChargeInSeconds:5000,
-                }
-              ]
-            }
-          ]
-      }
-
-      //Cal culate Route 
-      const baseUrl ='https://api.tomtom.com/routing/1/calculateLongDistanceEVRoute/';
-
-      const buildURL=  (options)=>{
-        console.log(options);
-        const url = baseUrl + options.origin.lat + ',' + options.origin.lng + ':'
-        + options.destination.lat + ',' + options.destination.lng + 
-        '/json?&vehicleEngineType=electric&travelMode=car&traffic=true&key=' + API_KEY +
-        '&vechileWeight=' + options.vechileWeight + 
-        '&currentChargeInkWh=' + options.currentCharge +
-        '&maxChargeInkWh=' +options.maxCharge + 
-        '&minChargeAtDestinationInkWh='+ options.minFinalCharge + 
-        '&minChargeAtChargingStopsInkWh=' + options.minChargeAtStop +
-        '&constantSpeedConsumptionInkWhPerHundredkm=' + options.speedConsumption;
-  
-        console.log (url);
-        return url;
-      }
-
-      const calculateRoute = (routeOption)=>{
-        const url =  buildURL(routeOption);
-        console.log(routeOption.chargingModes)
-        postData(url,routeOption.chargingModes)
-        .then(data => parseRoute(data.json()))// 
-        .catch(err => console.error(err))
-      }
-
-      const postData=   async (url = '',data = {})=>{
-        try {
-          const response = await fetch(url, {
-            method: 'POST',
-            type: 'cors',
-            cache: 'no-cache',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-          })
-          const response_1 = await response.json();
-          return console.log(response_1);
-        } catch (err) {
-          return console.log(err);
-        }
-      }
-      const parseRoute = (data)=>{
-        console.log(data);
-      }
-
-    /****************************************************/
+   
 
     return(
     <div>
       <div className="input-container">
-        <label htmlFor="waypoints">Waypoints:<input type="text" name ='waypoints' id='waypoints'/></label>
+        <label htmlFor="idSource">Waypoints:<input type="text" name ='waypoints' id='idSource'/></label>
         <button>clearLastWayPoints</button>
-        <button onClick={()=>SearchAdress()}>Add points</button>
-        <button onClick={()=>route()}>Route2</button>
+        <button onClick={()=>SearchAdress('idSource')}>Add points</button>
+        <button>Route</button>
       </div>
       {map && <div ref={mapELement} className="map-container"></div>}
 

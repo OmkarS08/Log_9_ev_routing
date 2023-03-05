@@ -3,6 +3,7 @@
     height:650px;
     margin: 50px auto;
     padding: 50px 50px;
+    border: 8px solid linear-gradient( rgb(42, 75, 117) 0%, rgb(211, 214, 218) 100%);;
 }
 
 .marker{
