@@ -62,7 +62,7 @@ constantSpeedCosumptionInkWhPerHundredKm:'45,19:100,22.4', // 45 is constant spe
 vechileEngineType:'electric',
 vechileWeight:3245,
 currentChargeInKWH:43.5,
-maxChargeInKWH:86.5
+maxChargeInKWH:50
 }
 const max = RapidX6000.maxChargeInKWH;
 
@@ -83,7 +83,7 @@ const RapidX6000ChargingModes ={
             ],
             chargingCurve:[
                 {
-                    chargeInkWh:86.5,
+                    chargeInkWh:50,
                     timeToChargeInSeconds:89100
                 }
             ]
@@ -92,13 +92,11 @@ const RapidX6000ChargingModes ={
             chargingConnections : [
               {facilityType : "Charge_200_to_240V_1_Phase_at_10A", 
               plugType : "Standard_Household_Country_Specific"},
-              {facilityType : "Charge_100_to_120V_1_Phase_at_16A",
-               plugType : "CHAdeMO"}
+    
             ],
             chargingCurve : [
-              {chargeInkWh : 86.5, timeToChargeInSeconds : 600},
-              {chargeInkWh : 86.5, timeToChargeInSeconds : 2000},
-              {chargeInkWh : 86.5, timeToChargeInSeconds : 8000}
+              {chargeInkWh : 50, timeToChargeInSeconds : 600},
+
             ]
         }
      
@@ -255,8 +253,8 @@ const searchDestination = () =>{
                 vechileWeight:RapidX6000.vechileWeight,
                 currentCharge: (0.5 * max),
                 maxCharge: max,
-                minFinalCharge:(max *0.2),
-                minChargeAtStop:(max * 0.2),
+                minFinalCharge:(max *0.3),
+                minChargeAtStop:(max * 0.3),
                 speedConsumption:RapidX6000.constantSpeedCosumptionInkWhPerHundredKm,
                 chargingModes:RapidX6000ChargingModes
             }
