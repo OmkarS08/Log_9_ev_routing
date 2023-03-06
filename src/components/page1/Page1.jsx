@@ -61,7 +61,7 @@ const RapidX6000 = {
 constantSpeedCosumptionInkWhPerHundredKm:'45,19:100,22.4', // 45 is constant speed and 19 is consumptionin kwh same is for 100 on highways 
 vechileEngineType:'electric',
 vechileWeight:3245,
-currentChargeInKWH:43.25,
+currentChargeInKWH:43.5,
 maxChargeInKWH:86.5
 }
 const max = RapidX6000.maxChargeInKWH;
@@ -83,7 +83,7 @@ const RapidX6000ChargingModes ={
             ],
             chargingCurve:[
                 {
-                    chargeInkWh:95,
+                    chargeInkWh:86.5,
                     timeToChargeInSeconds:89100
                 }
             ]
@@ -96,9 +96,9 @@ const RapidX6000ChargingModes ={
                plugType : "CHAdeMO"}
             ],
             chargingCurve : [
-              {chargeInkWh : 1.0, timeToChargeInSeconds : 600},
-              {chargeInkWh : 3.0, timeToChargeInSeconds : 2000},
-              {chargeInkWh : 10.0, timeToChargeInSeconds : 8000}
+              {chargeInkWh : 86.5, timeToChargeInSeconds : 600},
+              {chargeInkWh : 86.5, timeToChargeInSeconds : 2000},
+              {chargeInkWh : 86.5, timeToChargeInSeconds : 8000}
             ]
         }
      
@@ -113,14 +113,37 @@ const baseUrl = "https://api.tomtom.com/routing/1/calculateLongDistanceEVRoute/"
 
 const BuildUrl = (options) =>{
     const url = baseUrl + options.origin.lat +','+options.origin.lng +':'+
-    options.destination.lat + ',' + options.destination.lng + '/json?VechileEngineType=electric&travelMode=car&traffic=true&key='+API_KEY+
-    '&vechileWeight=' + options.vechileWeight + '&currentChargeInkWh=' + options.currentCharge +
+    options.destination.lat + ',' + options.destination.lng + '/json?vehicleEngineType=electric&travelMode=car&traffic=true&key='+API_KEY+
+    '&vehicleWeight=' + options.vechileWeight + '&currentChargeInkWh=' + options.currentCharge +
     '&maxChargeInkWh=' +options.maxCharge + '&minChargeAtDestinationInkWh='+ options.minFinalCharge+ 
+    '&minChargeAtChargingStopsInkWh='+options.minChargeAtStop + '&constantSpeedConsumptionInkWhPerHundredkm='+
+    options.speedConsumption;
+    return url;
+};
 
+ const postData=  (url ='',data={}) =>{
+
+    return fetch(url,{
+        method:'POST',
+        cache:'no-cache',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(data),
+    })
+    .then(res => res.json());
+    
 }
-ttapi.services.longDistanceEVRouting({
+const routeData =(data) =>{
+    console.log(data);
+}
 
-})
+const calculateRoute = (routeOptions) =>{
+    const url = BuildUrl(routeOptions);
+    postData(url,routeOptions.chargingModes)
+    .then(data => routeData(data))
+    .catch(err => console.log(err));
+}
 
 /*******************************Map element ********************************* */
     useEffect(()=>{
@@ -210,20 +233,20 @@ const searchDestination = () =>{
     const locations =waypoints.map((e) =>{
         return e.location
       })
-    ttapi.services
-            .calculateRoute({
-              key:API_KEY,
-              traffic:true,
-              locations:locations,
-              computeBestOrder:true,
+    // ttapi.services
+    //         .calculateRoute({
+    //           key:API_KEY,
+    //           traffic:true,
+    //           locations:locations,
+    //           computeBestOrder:true,
 
-            })
-            .then((routeData) =>{ 
-            const geoJson =routeData.toGeoJson()
-            SearchChargingStation(routeData)
-            setTimeout(drawRoute(geoJson,map), 3000)
-            console.log(routeData);
-            })
+    //         })
+    //         .then((routeData) =>{ 
+    //         const geoJson =routeData.toGeoJson()
+    //         SearchChargingStation(routeData)
+    //         setTimeout(drawRoute(geoJson,map), 3000)
+    //         console.log(routeData);
+    //         })
             
             const routeOptions = {
                 key:API_KEY,
