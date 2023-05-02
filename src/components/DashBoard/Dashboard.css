@@ -1,0 +1,98 @@
+/* This is a CSS code that defines the styling for a dashboard container and its contents. It includes
+styles for headings, images, text, and containers. The media query at the end adjusts the styles for
+smaller screens with a maximum width of 1000px. */
+h1{
+    text-align: center;
+    padding: 5%;
+}
+
+.dashboard-container{
+    border: 5px solid rgb(48, 48, 101);
+
+    margin: 5%;
+}
+.card-img-top{
+    width: 25%;
+    height: 25%;
+    text-align: center;
+    margin: 10px 38%;
+}
+.card-text{
+    text-align: center;
+    font-size: x-large;
+    font-weight: 500;
+}
+
+.card-title{
+    text-align: center;
+    font-size: large;
+    font-weight: 500;
+}
+.card-container{
+    background:linear-gradient(to top, rgb(9, 32, 63) 0%, rgb(56, 109, 150) 100%);
+    display: grid;
+    grid-template-columns: auto auto auto;
+    row-gap: 50px;
+    column-gap: 50px;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10%;
+}
+
+.card-text span {
+    color:rgb(0, 0, 61)
+}
+
+
+@media All and (max-width: 1000px) {
+
+    h1{
+        text-align: center;
+        padding: 5%;
+    }
+    .mb-2{
+        width: 100%;
+    }
+    .card-body{
+        width: 100%;
+    }
+    .dashboard-container{
+        border: 5px solid rgb(48, 48, 101);
+        margin: 5%;
+        border-radius: 15px;
+    }
+    .card-img-top{
+        width: 30%;
+        height: 30%;
+        align-items: center;
+        text-align: center;
+        margin: 5px auto;
+    }
+    .card-text{
+        text-align: center;
+        font-size: large;
+        font-weight: 400;
+    }
+    
+    .card-title{
+        text-align: center;
+        font-size: large;
+        font-weight: 400;
+    }
+    .card-container{
+        background:linear-gradient(to top, rgb(9, 32, 63) 0%, rgb(56, 109, 150) 100%);
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10%;
+    }
+    
+    .card-text span {
+        color:rgb(0, 0, 61)
+    }
+    
+
+
+}

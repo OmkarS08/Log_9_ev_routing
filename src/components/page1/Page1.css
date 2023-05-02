@@ -1,10 +1,15 @@
+/* This is a CSS code that defines the styling for a web page. It includes styles for various elements
+such as containers, input boxes, buttons, labels, and markers. It also includes media queries to
+adjust the styling for different screen sizes. */
 
 .page-container{
-    background: linear-gradient(to top, rgb(9, 32, 63) 0%, rgb(83, 120, 149) 100%);;
-    margin: 0;
+    background: linear-gradient(to top, rgb(9, 32, 63) 0%, rgb(56, 109, 150) 100%);
+    margin: 5%;
     padding: 0;
     display: flex;
     flex-direction: row;
+    border: 3px solid rgb(9, 32, 63);
+    border-radius: 20px;
 }
 .input-container{
     background-color: white;
@@ -13,23 +18,30 @@
     height: auto;
 }
 .map-search-container{
-    width: 75%;
+    width: 100%;
 }
 .search-container{
     width: 100%;
     background-color: white;
 }
+.origin-box{
+    align-items: center;
+    text-align: center;
+}
 
-
-
+.origin-box label{
+    font-weight: 700;
+    margin:0px 20px
+}
+.calculation-box{
+    text-align: center;
+}
 .input-container .box{
     background-color: #dfebed;
     text-align: center;
     margin: 10% 5%;
     padding: 10%;
 }
-
-
 
 .search-container {
 margin: 20px auto;
@@ -58,3 +70,77 @@ padding: 20px;
     height: 40px;
     border-radius: 10px;
 }
+
+@media All and (max-width: 1000px) {
+
+    
+.page-container{
+    background: linear-gradient(to top, rgb(9, 32, 63) 0%, rgb(56, 109, 150) 100%);
+    margin: 5%;
+    padding: 0%;
+    display: flex;
+    flex-direction: row;
+    border: 3px solid rgb(9, 32, 63);
+    border-radius: 20px;
+    height: 50%;
+}
+
+.map-search-container{
+    width: 100%;
+}
+.search-container{
+    width: 100%;
+    background-color: white;
+}
+.origin-box{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+
+}
+.origin-box button ,input{
+    width: 60%;
+    margin: 5px;
+}
+.origin-box label{
+    font-weight: 500;
+    margin:0px 5px
+}
+.calculation-box{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin: 0px 10px;
+}
+.calculation-box button{
+ width: 60%;
+ margin: 10px;
+}
+
+
+.search-container {
+margin: 5px 5px;
+padding: 5px;
+}
+
+.map-container{
+    width: 90%;
+
+}
+
+.search-container input{
+    margin : 0px 1%
+}
+
+.marker-origin{
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.marker-destination{
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+}
+  }
